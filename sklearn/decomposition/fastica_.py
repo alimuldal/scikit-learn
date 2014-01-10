@@ -49,13 +49,11 @@ def _gs_decorrelation(w, W, j):
 
 
 def _sym_decorrelation(W):
-    """ Symmetric decorrelation
+    """ Symmetric decorrelation by singular value decomposition
     i.e. W <- (W * W.T) ^{-1/2} * W
     """
-    s, u = linalg.eigh(np.dot(W, W.T))
-    # u (resp. s) contains the eigenvectors (resp. square roots of
-    # the eigenvalues) of W * W.T
-    return np.dot(np.dot(u * (1. / np.sqrt(s)), u.T), W)
+    U, _, Vt = linalg.svd(W, full_matrices=False, check_finite=False)
+    return np.dot(U, Vt)
 
 
 def _ica_def(X, tol, g, fun_args, max_iter, w_init):
